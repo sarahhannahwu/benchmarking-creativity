@@ -1,0 +1,16 @@
+[project]
+name = "benchmarking-creativity"
+version = "0.0.1"
+description = "Comparing human vs AI behavior in a creative foraging game"
+authors = [
+    {name = "sarahhannahwu",email = "sarahhannahwu@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
