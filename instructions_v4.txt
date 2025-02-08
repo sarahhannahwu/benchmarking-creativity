@@ -1,0 +1,13 @@
+You will play a game called “the search for the shifting shape”. Your goal is to explore the world of shifting shapes and discover those you consider as interesting and beautiful.
+Valid shapes are always contiguous and always contain exactly 10 squares. Here are the rules: 
+In each stage you can move exactly one existing square in order to change the current shape to the next one. The resulting shape must be connected through edges, not corners. In other words, a square can be moved only adjacent to another square (not in diagonal). You are allowed to wrap around the grid. See an example of a possible and non-possible move based on the current shape, which is a horizontal line. Each shape is represented as a single string with space-separated decimal values (e.g., a horizontal line is represented as 1023).
+This is an example of a valid move. It satisfies all the rules of the game.
+Shape: 1023
+Next shape: 2 1022
+But this is an invalid move because the shape is not completely connected through adjacent squares.
+Shape: 1023
+Next shape: 1022 1 
+Despite the simple rules of the game there are many beautiful and interesting shapes to discover. Your task is to move in each stage one square in order to reach a new shape. When you land on a shape you find particularly interesting and beautiful, save it to the ‘Shape Gallery’. You have to choose at least five shapes to save to the gallery.
+For each move, please specify the next shape as a string of space-separated integers. Remember, the new shape should always be contiguous, not separated by 0s or connected by diagonals.
+
+Your initial shape is a horizontal line: 1023
