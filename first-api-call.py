@@ -2,6 +2,8 @@ import openai
 import json as js
 import os
 
+from functions.tools import is_valid_move
+
 api_key = os.environ.get('OPENAI_KEY')
 
 def get_openai_response(user_prompt, prompt):
@@ -24,3 +26,6 @@ prompt = "The object is a paperclip."
 response = get_openai_response(user_prompt, prompt)
 
 print(response)
+
+
+

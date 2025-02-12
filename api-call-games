@@ -1,0 +1,60 @@
+import json
+import datetime
+import os
+import openai
+
+from functions.tools import is_valid_move
+
+# Set your OpenAI API key
+api_key = os.environ.get('OPENAI_KEY')
+
+
+# Define a function to get a response from the OpenAI API
+def get_openai_response(user_prompt, prompt):
+    try:
+        # Remove empty values from prompt (e.g., initial prompt)
+        prompt = {k: v for k, v in prompt.items() if v}
+        messages = [
+            {"role": "system", "content": user_prompt},  # Full game instructions
+            {"role": "user", "content": json.dumps(prompt)}  # Current move instructions (dict dumped to string)
+        ]
+
+        # Make the API call
+        response = openai.chat.completions.create(
+            model="gpt-4o",  # Specify the model you want to use
+            messages=messages,
+            max_tokens=100  # Adjust the number of tokens as needed
+        )
+
+        # Extract the response content
+        response_content = response.choices[0].message['content'].strip()
+
+        # Parse the response content to extract current shape and next shape
+        response_data = json.loads(response_content)
+        current_shape = response_data.get('current_shape')
+        next_shape = response_data.get('next_shape')
+
+        
+        # Process the API response
+        output = {
+            'messages': messages,
+            'current_shape': prompt.get('current_shape'),
+            'last_shape': prompt.get('last_shape'),
+            'response': response.choices[0].message.content.strip(),  # Note: changed .text to .message.content
+            'timestamp': datetime.datetime.now().isoformat()
+        }
+        output['valid_move'] = is_valid_move(output['response'])
+        return output
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+# Example usage
+user_prompt = "instructions_v4.txt"
+prompt = {
+    "current_shape": "shape1",
+    "last_shape": "shape0",
+    "move": "move1"
+}
+
+response = get_openai_response(user_prompt, prompt)
+print(response)
