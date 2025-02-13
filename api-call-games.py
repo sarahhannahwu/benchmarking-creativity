@@ -11,38 +11,31 @@ from pydantic import BaseModel
 api_key = os.environ.get('OPENAI_KEY')
 
 # Define a class to represent the structured output from the OpenAI API
-
+# unsure how these values are extracted from the API response
 class GameMove(BaseModel):
-    messages: list
     shape: str
     next_shape: str
-    response: str
-    timestamp: str
-    valid_move: bool
+    response: str 
 
 client = OpenAI()
 
 # Define a function to get game responses from the OpenAI API
-def get_openai_response(user_prompt, prompt):
+def get_openai_response(user_prompt):
     try:
         # Call the OpenAI API using the new interface
-        response = openai.chat.completions.create(
+        response = client.beta.chat.completions.parse(
             model="gpt-4o-mini",  # Use the appropriate model
             messages=[
-                {"role": "system", "content": user_prompt},
-                {"role": "user", "content": prompt}
+                {"role": "system", "content": user_prompt}
             ],
-            max_tokens=150  # Adjust the number of tokens as needed
+            max_tokens=150,  # Adjust the number of tokens as needed
+            response_format=GameMove,   # Use the GameMove class to structure the response
         )
         # Extract the text from the response
-        return response
+        return response.choices[0].message.parsed
     except Exception as e:
         return f"An error occurred: {e}"
 
-
-user_prompt = "instructions_v4.txt"
-prompt={
-    "current_shape": "1023", 
-    "last_shape": ""
-}
-get_openai_response(user_prompt, prompt)
+with open("instructions_v4.txt", "r") as file:
+    user_prompt = file.read()
+    print(get_openai_response(user_prompt))
