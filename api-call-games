@@ -4,12 +4,26 @@ import os
 import openai
 
 from functions.tools import is_valid_move
+from openai import OpenAI
+from pydantic import BaseModel
 
 # Set your OpenAI API key
 api_key = os.environ.get('OPENAI_KEY')
 
+# Define a class to represent the structured output from the OpenAI API
 
-# Define a function to get a response from the OpenAI API
+class GameMove(BaseModel):
+    messages: list
+    shape: str
+    next_shape: str
+    response: str
+    timestamp: str
+    valid_move: bool
+
+client = OpenAI()
+
+# Define a function to call the OpenAI API and process the response using the GameMove class
+
 def get_openai_response(user_prompt, prompt):
     try:
         # Remove empty values from prompt (e.g., initial prompt)
@@ -21,7 +35,7 @@ def get_openai_response(user_prompt, prompt):
 
         # Make the API call
         response = openai.chat.completions.create(
-            model="gpt-4o",  # Specify the model you want to use
+            model="gpt-3.5-turbo",  # Specify the model you want to use
             messages=messages,
             max_tokens=100  # Adjust the number of tokens as needed
         )
@@ -34,25 +48,28 @@ def get_openai_response(user_prompt, prompt):
         current_shape = response_data.get('current_shape')
         next_shape = response_data.get('next_shape')
 
+        # Check if the move is valid
+        valid_move = is_valid_move(current_shape, next_shape)
         
-        # Process the API response
-        output = {
-            'messages': messages,
-            'current_shape': prompt.get('current_shape'),
-            'last_shape': prompt.get('last_shape'),
-            'response': response.choices[0].message.content.strip(),  # Note: changed .text to .message.content
-            'timestamp': datetime.datetime.now().isoformat()
-        }
-        output['valid_move'] = is_valid_move(output['response'])
-        return output
+        # Create a GameMove instance
+        game_move = GameMove(
+            messages=messages,
+            shape=current_shape,
+            next_shape=next_shape,
+            response=response_content,
+            timestamp=datetime.datetime.now().isoformat(),
+            valid_move=valid_move
+        )
+
+        return game_move
     except Exception as e:
         return f"An error occurred: {e}"
 
 # Example usage
 user_prompt = "instructions_v4.txt"
 prompt = {
-    "current_shape": "shape1",
-    "last_shape": "shape0",
+    "shape": "shape0",
+    "next_shape": "shape1",
     "move": "move1"
 }
 

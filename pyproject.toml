@@ -15,7 +15,8 @@ dependencies = [
     "scipy (>=1.15.1,<2.0.0)",
     "openai (>=1.61.1,<2.0.0)",
     "config (>=0.5.1,<0.6.0)",
-    "python-dotenv (>=1.0.1,<2.0.0)"
+    "python-dotenv (>=1.0.1,<2.0.0)",
+    "pydantic (>=2.10.6,<3.0.0)"
 ]
 
 [tool.poetry]
