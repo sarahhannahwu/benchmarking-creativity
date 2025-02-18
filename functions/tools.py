@@ -15,6 +15,7 @@ def decode_shape_binaries_str(encoded_str, bits=10):
 
     shape = []
     for code in codes:
+        
         # Convert the code (string) to an integer
         number = int(code)
 
@@ -39,6 +40,8 @@ def encode_shape_binaries(shape, bits=10):
     """
     codes = []
     for row in shape:
+        if 1 not in row:
+            continue
         # Convert the list of bits into a binary string
         binary_str = ''.join([str(bit) for bit in row])
 
