@@ -32,7 +32,7 @@ def get_openai_response(user_prompt):
             response_format=GameMove,   # Use the GameMove class to structure the response
         )
         # Extract the text from the response
-        return response.choices[0].message.parsed
+        return response.choices[0].message.content
     except Exception as e:
         return f"An error occurred: {e}"
 
