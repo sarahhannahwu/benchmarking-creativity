@@ -39,7 +39,7 @@ with open("instructions_v5.txt", "r") as file:
     prompt = file.read()
 
 response = client.chat.completions.create(
-    model="gpt-4",
+    model="o1-mini",
     messages=[
         {
             "role": "user",
