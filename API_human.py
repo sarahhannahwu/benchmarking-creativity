@@ -145,9 +145,10 @@ SHAPES TO CHOOSE FROM {sample_note}:
 
     messages = [{"role": "user", "content": prompt}]
     
-    response = client.chat.completions.create(
+    response = client.beta.chat.completions.parse(
         model=MODEL,
-        messages=messages
+        messages=messages,
+        response_format=GameMove
     )
 
     model_response = response.choices[0].message.content

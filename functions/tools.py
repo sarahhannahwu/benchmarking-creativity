@@ -1,5 +1,10 @@
 import pandas as pd
 
+class GameMove(BaseModel):
+    shape: str
+    next_shape: str
+    response: str 
+    
 def decode_shape_binaries_str(encoded_str, bits=10):
     """
     Decodes a single string of space-separated decimal codes into
