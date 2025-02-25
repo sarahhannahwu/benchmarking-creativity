@@ -52,6 +52,41 @@ def encode_shape_binaries(shape, bits=10):
 
     return ' '.join(codes)
 
+def matrix_to_coordinates(matrix):
+    """
+    Convert a 2D array of bits to a list of (x,y) coordinate tuples on a 10x10 grid.
+    
+    Args:
+        matrix: A 2D array/list where 1 represents a filled square and 0 represents an empty square
+        
+    Returns:
+        A list of (x,y) tuples representing the coordinates of filled squares
+        where (0,0) is the top-left corner
+    """
+    coordinates = []
+    
+    # Check if matrix is provided as a string representation
+    if isinstance(matrix, str):
+        import ast
+        try:
+            # Try to parse as a Python literal (list of lists)
+            matrix = ast.literal_eval(matrix)
+        except:
+            # If that fails, try processing as a string representation
+            matrix = matrix.replace('[', '').replace(']', '')
+            rows = matrix.split('],[')
+            parsed_matrix = []
+            for row in rows:
+                parsed_matrix.append([int(cell) for cell in row.split(',')])
+            matrix = parsed_matrix
+    
+    # Iterate through the matrix and collect coordinates of filled cells
+    for y, row in enumerate(matrix):
+        for x, cell in enumerate(row):
+            if cell == 1:
+                coordinates.append((x, y))
+    
+    return coordinates
 
 def is_contiguous(shape):
     rows = len(shape)
