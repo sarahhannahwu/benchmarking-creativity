@@ -1,0 +1,13 @@
+You will see shapes from a game called "the search for the shifting shape". Your goal is to explore the world of shifting shapes and discover those you consider as interesting and beautiful.
+
+Each shape is represented as a matrix where:
+- 1s represent filled squares
+- 0s represent blank spaces
+- All shapes are composed of exactly 10 connected squares
+
+When you find shapes that are particularly interesting and beautiful, select them for the 'Shape Gallery'. 
+You can choose anywhere from five to the total number of shapes to save to the gallery. 
+
+For each gallery save, provide:
+1. Its unique ID
+2. A brief explanation of why you chose it (aesthetic quality, symmetry, resemblance to real objects, etc.)
