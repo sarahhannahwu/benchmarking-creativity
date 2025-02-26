@@ -1,0 +1,96 @@
+You will see shapes from a game called "the search for the shifting shape". Your goal is to explore the world of shifting shapes and discover those you consider as interesting and beautiful.
+
+Each shape is represented as a matrix where:
+- 1s represent filled squares
+- 0s represent blank spaces
+- All shapes are composed of exactly 10 connected squares
+
+For shapes with visual representations, ■ represents filled squares and □ represents empty spaces.
+
+When you find shapes that are particularly interesting and beautiful, select them for the 'Shape Gallery'. 
+You must choose at least five shapes to save to the gallery.
+
+For each gallery save, provide:
+1. Its unique ID
+2. A brief explanation of why you chose it (aesthetic quality, symmetry, resemblance to real objects, etc.)
+
+Shape ID: 1
+Matrix:
+1111111111
+
+Shape ID: 18
+Matrix:
+0100010000
+1111111000
+0001000000
+
+Shape ID: 30
+Matrix:
+0100000000
+0110000000
+1111000000
+0110000000
+0100000000
+
+Shape ID: 36
+Matrix:
+0100000000
+1110000000
+1110000000
+1110000000
+
+Shape ID: 56
+Matrix:
+0100000000
+1110000000
+0100000000
+1110000000
+0100000000
+0100000000
+
+Shape ID: 63
+Matrix:
+1110000000
+1110000000
+0100000000
+1110000000
+
+Shape ID: 73
+Matrix:
+1010000000
+1110000000
+1110000000
+0100000000
+0100000000
+
+Shape ID: 76
+Matrix:
+1111100000
+0111000000
+0010000000
+0010000000
+
+Shape ID: 90
+Matrix:
+0100000000
+1110000000
+0100000000
+0100000000
+1110000000
+0100000000
+
+Shape ID: 104
+Matrix:
+1111000000
+0010000000
+0010000000
+1111000000
+
+Shape ID: 110
+Matrix:
+0110000000
+0010000000
+0010000000
+0010000000
+1111100000
+
