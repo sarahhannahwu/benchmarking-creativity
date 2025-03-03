@@ -85,7 +85,8 @@ with open(fp_openai_responses, 'a') as f: # appends to the file, instead of over
     output = {
         "response": openai_response,
         "timestamp": datetime.datetime.now().isoformat(), 
-        "prompt_file": fp_instructions_with_shapes
+        "prompt_file": fp_instructions_with_shapes,
+        "model": MODEL
     }
     f.write(json.dumps(output))
     f.write("\n")

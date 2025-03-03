@@ -6,7 +6,7 @@ Each shape is represented as a matrix where:
 - All shapes are composed of exactly 10 connected squares
 
 When you find shapes that are particularly interesting and beautiful, select them for the 'Shape Gallery'. 
-You can choose anywhere from five to the total number of shapes to save to the gallery. 
+You must choose at least 10 and at most 150 shapes to save to your gallery.  
 
 For each gallery save, provide:
 1. Its unique ID
