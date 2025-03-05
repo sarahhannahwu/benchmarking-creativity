@@ -35,7 +35,7 @@ class GameMove(BaseModel):
 
 client = OpenAI()
 
-with open("instructions_v5.txt", "r") as file:
+with open("instructions/generation_instructions_v5.txt", "r") as file:
     prompt = file.read()
 
 response = client.chat.completions.create(

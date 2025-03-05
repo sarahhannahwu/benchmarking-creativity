@@ -50,7 +50,7 @@ def get_openai_response(user_prompt, model=MODEL) -> dict: # stores the output a
 
 
 # Load base instructions
-with open("instructions_v5.txt", "r") as file:
+with open("instructions/generation_instructions_v5.txt", "r") as file:
     user_prompt = file.read()
     print(get_openai_response(user_prompt))
 
@@ -59,12 +59,12 @@ fp = "data/all-games.tsv"
 shape_descriptions = select_gallery_shapes(fp)
 
 # Save the instructions
-fp_instructions = "evaluation_instructions_v2.txt"
+fp_instructions = "instructions/evaluation_instructions_v2.txt"
 with open(fp_instructions, 'r') as f:
     instructions = f.read()
 
 # Save the instructions with shapes
-fp_instructions_with_shapes = "evaluation_instructions_with_shapes_v2.txt"
+fp_instructions_with_shapes = "instructions/evaluation_instructions_with_shapes_v2.txt"
 with open(fp_instructions_with_shapes, 'w') as f:
     f.write(instructions)
     f.write("\n\n")
