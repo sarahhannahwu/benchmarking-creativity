@@ -7,8 +7,11 @@ import openai
 from openai import OpenAI
 from pydantic import BaseModel
 
+# from API_calls.evaluation import MODEL
+
 # Set your OpenAI API key
-api_key = os.environ.get('OPENAI_REASONING_KEY')
+api_key = os.environ.get('OPENAI_API_KEY')
+MODEL = "o3-mini"
 
 # Define a class to represent the structured output from the OpenAI API
 # unsure how these values are extracted from the API response
@@ -24,7 +27,7 @@ def get_openai_response(user_prompt):
     try:
         # Call the OpenAI API using the new interface
         response = client.beta.chat.completions.parse(
-            model="o3-mini",  # Use the appropriate model
+            model=MODEL,  # Use the appropriate model
             messages=[
                 {"role": "system", "content": user_prompt}
             ],
@@ -36,6 +39,20 @@ def get_openai_response(user_prompt):
     except Exception as e:
         return f"An error occurred: {e}"
 
-with open("instructions_v5.txt", "r") as file:
-    user_prompt = file.read()
-    print(get_openai_response(user_prompt))
+generation_instructions = "instructions/generation_instructions_v5.txt"
+
+with open(generation_instructions, "r") as f:
+    user_prompt = f.read()
+
+# Call the OpenAI API
+fp_openai_generations = "openai_generations.jsonl" # JSONL separates JSON objects into individual lines
+openai_generations = get_openai_response(user_prompt)
+with open(fp_openai_generations, 'a') as f: # appends to the file, instead of overwriting
+    output = {
+        "response": openai_generations,
+        "timestamp": datetime.datetime.now().isoformat(), 
+        "prompt_file": generation_instructions,
+        "model": MODEL
+    }
+    f.write(json.dumps(output))
+    f.write("\n")
