@@ -1,5 +1,6 @@
 import pandas as pd
 from pydantic import BaseModel
+import copy
 
 class GameMove(BaseModel):
     shape: str
@@ -158,3 +159,118 @@ def is_valid_move(shape, next_shape): # Take in the shape and next_shape as 2D l
     if is_contiguous(next_shape) and is_one_change(shape, next_shape):
         return True
     return False
+
+
+def neighbors(polyomino):
+    """
+    ARGS: polyomino: a list of tuples representing the squares of a polyomino
+    RETURN: a list of tuples representing the squares that are valid neighbors of the polyomino
+    """
+    found = []
+    for (x,y) in polyomino:
+        for delta_x, delta_y in [(1,0), (-1,0), (0,1), (0,-1)]:
+            if y + delta_y < 0 or (y + delta_y == 0 and x + delta_x < 0):
+                continue
+            new_square = (x + delta_x, y + delta_y)
+            if new_square not in found:
+                found.append(new_square)
+    return found
+
+def redelmeier(n):
+    """
+    ARGS: n: the size of the polyominoes to count
+    Caller function to redelmeier_recursion. Initializes the counts list and calls the recursive function.
+    """
+    polyomino = []
+    n_ominoes = []
+    untried_set = [(0,0)]
+    redelmeier_recursion(n, n_ominoes, polyomino, untried_set)
+    return n_ominoes
+
+def redelmeier_recursion(n, n_ominoes, polyomino, untried_set):
+    while len(untried_set) > 0:
+        new_square = untried_set.pop()
+        new_untried_set = copy.copy(untried_set)
+        new_square_neighbors = neighbors([new_square])
+        polyomino_neighbors = neighbors(polyomino)
+        for s in new_square_neighbors:
+            if s not in polyomino_neighbors and s not in polyomino:
+                new_untried_set.append(s)
+        new_polyomino = copy.copy(polyomino)
+        new_polyomino.append(new_square)
+        if len(new_polyomino) < n:
+            redelmeier_recursion(n, n_ominoes, new_polyomino, new_untried_set)
+        else:
+            n_ominoes.append(new_polyomino)
+            
+
+
+# Converts tuple representation of polyomino to grid representation
+def tuple_polyomino_to_grid(tuple_polyomino):
+    min_x = min([x for (x,y) in tuple_polyomino])
+    min_y = min([y for (x,y) in tuple_polyomino])
+    tuple_polyomino = [(x - min_x, y - min_y) for (x,y) in tuple_polyomino]
+    grid = [[0 for i in range(10)] for j in range(10)]
+    for (x,y) in tuple_polyomino:
+        grid[x][y] = 1 # change to [y][x] if you want the shape top-justified
+    return grid
+
+def get_rotations(decomino):
+    rotate = lambda decomino: [(y,-x) for (x,y) in decomino]
+    rotations = []
+    for _ in range(4):      
+        decomino = rotate(decomino)
+        rotations.append(decomino)
+    return rotations
+
+
+def get_reflections(decomino):
+    return [[(-x,y) for (x,y) in decomino], [(x,-y) for (x,y) in decomino]]
+
+def get_all_transformations(decomino):
+    """Get all possible transformations (rotations and reflections) of a decomino"""
+    transformations = []
+    for rotation in get_rotations(decomino):
+        transformations.append(rotation)
+        for reflection in get_reflections(rotation):
+            transformations.append(reflection)
+    return transformations
+
+# Takes in the fixed decominoes and returns the smaller set of free decominoes
+def get_unique_decominoes(decominoes):
+    unique_decominoes = set()
+    for decomino in decominoes:
+        transformations = [] # A list of tuple representations of the decomino's rotations and reflections
+        for rotation in get_rotations(decomino):
+            transformations.append(rotation)
+            for reflection in get_reflections(rotation):
+                transformations.append(reflection)
+        transformations_grids = map(tuple_polyomino_to_grid, transformations)
+        transformation_encodings_set = set(map(encode_shape_binaries, transformations_grids))
+        if not transformation_encodings_set.intersection(unique_decominoes): # Transform every possible way and check if any of them are already in the set
+            unique_decominoes.add(encode_shape_binaries(tuple_polyomino_to_grid(decomino)))
+    return unique_decominoes
+
+# Takes in the fixed decominoes and returns the smaller set of free decominoes
+def print_unique_decominoes(decominoes):
+    unique_decominoes = set()
+    for decomino in decominoes:
+        transformations = [] # A list of tuple representations of the decomino's rotations and reflections
+        for rotation in get_rotations(decomino):
+            transformations.append(rotation)
+            for reflection in get_reflections(rotation):
+                transformations.append(reflection)
+        transformations_grids = map(tuple_polyomino_to_grid, transformations)
+        transformation_encodings_set = set(map(encode_shape_binaries, transformations_grids)) 
+        print(f"Decomino: {decomino}")
+        print(f"Transformation Encodings: {transformation_encodings_set}")
+        if not transformation_encodings_set.intersection(unique_decominoes): # Transform every possible way and check if any of them are already in the set
+            unique_decominoes.add(encode_shape_binaries(tuple_polyomino_to_grid(decomino)))
+    return unique_decominoes
+
+def grid_to_string(grid):
+    string = ""
+    for row in grid:
+        # Convert each number to string before joining
+        string += " ".join(str(cell) for cell in row).replace('1', '■').replace('0', '_') + "\n"
+    return string
